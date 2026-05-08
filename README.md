@@ -3,7 +3,7 @@
 > Una colección de **agentes de Microsoft Copilot Studio** listos para clonar, personalizar y desplegar. Cada agente es una historia diferente: productividad, ventas, eventos… todos con IA generativa en el centro. 🌸
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1000&color=C865F7&center=true&vCenter=true&width=600&lines=Agents+that+spark+joy+✨;Powered+by+Microsoft+Copilot+Studio+🤖;Built+with+%E2%9D%A4%EF%B8%8F+by+Erika+Cepeda" alt="Typing SVG" />
+  <i>✨ Agents that spark joy · Powered by Microsoft Copilot Studio 🤖 · Built with ❤️ by Erika Cepeda ✨</i>
 </p>
 
 <p align="center">
