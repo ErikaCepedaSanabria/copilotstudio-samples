@@ -1,0 +1,31 @@
+﻿displayName: Recomendador de sesiones
+schemaName: cr5e6_Recomendadordesesiones
+accessControlPolicy: GroupMembership
+authenticationMode: Integrated
+authenticationTrigger: Always
+configuration:
+  channels:
+    - channelId: MsTeams
+
+  settings:
+    GenerativeActionsEnabled: true
+
+  isAgentConnectable: true
+  publishOnCreate: false
+  publishOnImport: true
+  gPTSettings:
+    defaultSchemaName: cr5e6_Recomendadordesesiones.gpt.default
+
+  isLightweightBot: false
+  aISettings:
+    useModelKnowledge: true
+    isFileAnalysisEnabled: true
+    isSemanticSearchEnabled: true
+    contentModeration: Low
+    optInUseLatestModels: false
+
+  recognizer:
+    kind: GenerativeAIRecognizer
+
+template: default-2.1.0
+language: 1034

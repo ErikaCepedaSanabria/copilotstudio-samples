@@ -1,0 +1,95 @@
+mcs.metadata:
+  componentName: RecomendarSesionesExpress
+  description: Recomendación rápida de sesiones con solo 3 preguntas para Power Platform Madrid 2026
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: RecomendarSesionesExpress
+    triggerQueries:
+      - agenda express
+      - recomendacion express
+      - recomendar sesiones express
+      - recomendame 3 sesiones
+      - ruta rapida del evento
+
+  actions:
+    - kind: SendActivity
+      id: send_intro_express
+      activity: |
+        Vamos en modo express. Te haré 3 preguntas y te devolveré una agenda corta recomendada.
+
+    - kind: Question
+      id: ask_tematica_express
+      alwaysPrompt: true
+      variable: init:Topic.TematicaExpress
+      prompt: "¿Qué temática prefieres?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Power Apps"
+          value: "Power Apps"
+        - display: "Power Automate"
+          value: "Power Automate"
+        - display: "Power BI"
+          value: "Power BI"
+        - display: "Copilot Studio y agentes"
+          value: "Copilot Studio"
+        - display: "ALM y gobernanza"
+          value: "ALM y gobernanza"
+        - display: "Mixto"
+          value: "Mixto"
+
+    - kind: Question
+      id: ask_nivel_express
+      alwaysPrompt: true
+      variable: init:Topic.NivelExpress
+      prompt: "¿Tu nivel actual?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Inicial"
+          value: "Inicial"
+        - display: "Intermedio"
+          value: "Intermedio"
+        - display: "Avanzado"
+          value: "Avanzado"
+
+    - kind: Question
+      id: ask_disponibilidad_express
+      alwaysPrompt: true
+      variable: init:Topic.DisponibilidadExpress
+      prompt: "¿Qué disponibilidad tienes?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Mañana"
+          value: "Manana"
+        - display: "Tarde"
+          value: "Tarde"
+        - display: "Día completo"
+          value: "Dia completo"
+
+    - kind: SearchAndSummarizeContent
+      id: gen_recomendaciones_express
+      variable: Topic.Answer
+      moderationLevel: Medium
+      userInput: |-
+        ="Recomienda 3 sesiones para Power Platform Madrid 2026 con este perfil. " &
+         "Temática: " & Topic.TematicaExpress & ". " &
+         "Nivel: " & Topic.NivelExpress & ". " &
+         "Disponibilidad: " & Topic.DisponibilidadExpress & "."
+      additionalInstructions: |
+        Actúa como recomendador express del evento "Power Platform Madrid 2026" usando las fuentes de conocimiento del agente.
+
+        Devuelve la respuesta en español con esta estructura:
+        1. **Top 3 sesiones recomendadas** en una tabla: Hora, Sesión, Ponente, Por qué encaja.
+        2. **Mini ruta horaria** dentro del tramo disponible, en orden cronológico.
+        3. **Una sesión alternativa de respaldo**.
+
+        Reglas estrictas:
+        - No inventes títulos, ponentes, salas ni horarios. Si la agenda pública no recoge el dato, indica "no disponible" y recomienda por temática.
+        - Cita la fuente cuando sea posible.
+        - Si todavía no se ha publicado la agenda detallada, dilo con transparencia.
+
+    - kind: SendActivity
+      id: send_fin_express
+      activity: Si quieres, después te amplío esta versión express a una agenda completa con más detalle.

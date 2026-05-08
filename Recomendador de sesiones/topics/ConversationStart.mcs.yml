@@ -1,0 +1,15 @@
+mcs.metadata:
+  componentName: Inicio de la conversación
+  description: Este tema del sistema se desencadena cuando el agente recibe una actividad que indica el inicio de una nueva conversación. Si no desea que el agente inicie la conversación, deshabilite este tema.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnConversationStart
+  id: main
+  actions:
+    - kind: SendActivity
+      id: sendMessage_M0LuhV
+      activity:
+        text:
+          - Hola, soy {System.Bot.Name}. Puedo recomendarte sesiones personalizadas para Power Platform Madrid 2026. ¿Empezamos?
+        speak:
+          - Hola y gracias por llamar a {System.Bot.Name}. Puedo recomendarte sesiones personalizadas para Power Platform Madrid 2026. Ten en cuenta que algunas respuestas se generan mediante IA y puede ser necesario comprobar su precisión. ¿Empezamos?

@@ -1,0 +1,22 @@
+mcs.metadata:
+  componentName: Alternativa
+  description: Este tema del sistema se desencadena cuando la expresión del usuario no coincide con ningún tema existente.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnUnknownIntent
+  id: main
+  actions:
+    - kind: ConditionGroup
+      id: conditionGroup_LktzXw
+      conditions:
+        - id: conditionItem_tlGIVo
+          condition: =System.FallbackCount < 3
+          actions:
+            - kind: SendActivity
+              id: sendMessage_QZreqo
+              activity: Lo siento, no sé muy bien cómo ayudarle. ¿Puede intentar decirlo de otra forma?
+
+      elseActions:
+        - kind: BeginDialog
+          id: 5aXj5M
+          dialog: cr5e6_Recomendadordesesiones.topic.Escalate

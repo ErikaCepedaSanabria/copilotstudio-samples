@@ -1,0 +1,209 @@
+mcs.metadata:
+  componentName: RecomendarSesionesEvento
+  description: Pregunta gustos del usuario y recomienda sesiones del evento Power Platform Madrid 2026
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: RecomendarSesionesEvento
+    triggerQueries:
+      - recomendar sesiones
+      - recomiendame sesiones
+      - que sesiones me recomiendas
+      - agenda recomendada
+      - sesiones para mi perfil
+      - power platform madrid 2026
+      - evento power platform madrid
+
+  actions:
+    - kind: SendActivity
+      id: send_intro_recomendador
+      activity: |
+        Genial. Te ayudo a elegir sesiones para **Power Platform Madrid 2026**.
+        Te haré unas preguntas rápidas y te propondré una selección personalizada.
+
+    - kind: Question
+      id: ask_tematica
+      alwaysPrompt: true
+      variable: init:Topic.TematicaPreferida
+      prompt: "¿Qué temática te interesa más?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Power Apps"
+          value: "Power Apps"
+        - display: "Power Automate"
+          value: "Power Automate"
+        - display: "Power BI"
+          value: "Power BI"
+        - display: "Copilot Studio y agentes"
+          value: "Copilot Studio"
+        - display: "Arquitectura, ALM y gobernanza"
+          value: "ALM y gobernanza"
+        - display: "Varias temáticas"
+          value: "Mixto"
+
+    - kind: Question
+      id: ask_nivel
+      alwaysPrompt: true
+      variable: init:Topic.NivelUsuario
+      prompt: "¿Cuál es tu nivel en Power Platform?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Inicial"
+          value: "Inicial"
+        - display: "Intermedio"
+          value: "Intermedio"
+        - display: "Avanzado"
+          value: "Avanzado"
+
+    - kind: Question
+      id: ask_formato
+      alwaysPrompt: true
+      variable: init:Topic.FormatoPreferido
+      prompt: "¿Qué formato prefieres?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Sesiones técnicas profundas"
+          value: "Tecnica"
+        - display: "Casos reales y demos"
+          value: "Casos reales"
+        - display: "Estrategia y visión"
+          value: "Estrategia"
+        - display: "Me da igual"
+          value: "Indiferente"
+
+    - kind: Question
+      id: ask_objetivo
+      alwaysPrompt: true
+      variable: init:Topic.ObjetivoPrincipal
+      prompt: "¿Cuál es tu objetivo principal en el evento?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Aprender fundamentos"
+          value: "Aprendizaje"
+        - display: "Llevar ideas a un proyecto real"
+          value: "Proyecto"
+        - display: "Escalar y gobernar en empresa"
+          value: "Escalado"
+        - display: "Conocer novedades y roadmap"
+          value: "Novedades"
+
+    - kind: Question
+      id: ask_idioma
+      alwaysPrompt: true
+      variable: init:Topic.IdiomaPreferido
+      prompt: "¿En qué idioma prefieres las sesiones?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Español"
+          value: "Espanol"
+        - display: "Inglés"
+          value: "Ingles"
+        - display: "Indiferente"
+          value: "Indiferente"
+
+    - kind: Question
+      id: ask_horario
+      alwaysPrompt: true
+      variable: init:Topic.Disponibilidad
+      prompt: "¿Qué disponibilidad tienes en el evento?"
+      entity: StringPrebuiltEntity
+      choices:
+        - display: "Todo el dia"
+          value: "Dia completo"
+        - display: "Solo manana"
+          value: "Manana"
+        - display: "Solo tarde"
+          value: "Tarde"
+        - display: "Sesiones puntuales"
+          value: "Puntual"
+
+    - kind: SendActivity
+      id: send_procesando
+      activity: |
+        Perfecto. Estoy preparando tus recomendaciones con este perfil:
+        - Temática: {Topic.TematicaPreferida}
+        - Nivel: {Topic.NivelUsuario}
+        - Formato: {Topic.FormatoPreferido}
+        - Objetivo: {Topic.ObjetivoPrincipal}
+        - Idioma: {Topic.IdiomaPreferido}
+        - Disponibilidad: {Topic.Disponibilidad}
+
+    - kind: SearchAndSummarizeContent
+      id: gen_recomendaciones
+      variable: Topic.Answer
+      moderationLevel: Medium
+      userInput: |-
+        ="Recomienda sesiones para Power Platform Madrid 2026 con este perfil de asistente. " &
+         "Temática preferida: " & Topic.TematicaPreferida & ". " &
+         "Nivel: " & Topic.NivelUsuario & ". " &
+         "Formato preferido: " & Topic.FormatoPreferido & ". " &
+         "Objetivo principal: " & Topic.ObjetivoPrincipal & ". " &
+         "Idioma preferido: " & Topic.IdiomaPreferido & ". " &
+         "Disponibilidad: " & Topic.Disponibilidad & "."
+      additionalInstructions: |
+        Actúa como recomendador oficial de agenda para el evento "Power Platform Madrid 2026".
+        Usa siempre la información disponible en las fuentes de conocimiento del agente.
+
+        Devuelve la respuesta en español con esta estructura:
+        1. **Top 5 sesiones recomendadas** (o menos si no hay más relevantes).
+           Preséntalas en una tabla con columnas: Hora, Sala, Sesión, Ponente, Por qué encaja.
+        2. **Itinerario sugerido** según la disponibilidad indicada (mañana, tarde o día completo), en orden cronológico.
+        3. **Una alternativa de respaldo** por si alguna sesión se llena o cambia.
+        4. **Consejo práctico** breve para sacar más partido a la agenda.
+
+        Reglas estrictas:
+        - No inventes títulos, ponentes, salas u horarios. Si la agenda pública no recoge un dato, di "no disponible" y recomienda por temática.
+        - Cita la fuente cuando sea posible.
+        - Si no se ha publicado todavía la agenda detallada, indícalo con transparencia y propón sesiones tipo basadas en la temática y nivel del usuario.
+        - Cierra invitando a confirmar el detalle en la página oficial del evento.
+
+    - kind: Question
+      id: ask_refinar
+      alwaysPrompt: true
+      variable: init:Topic.RecRefinar
+      prompt: "¿Quieres que te refine la recomendación para un rol concreto (maker, desarrollador, arquitecto, analista)?"
+      entity: BooleanPrebuiltEntity
+
+    - kind: ConditionGroup
+      id: cond_refinar
+      conditions:
+        - id: if_refinar_true
+          condition: =Topic.RecRefinar = true
+          actions:
+            - kind: Question
+              id: ask_rol
+              alwaysPrompt: true
+              variable: init:Topic.RolObjetivo
+              prompt: "¿Para qué rol quieres afinar la agenda?"
+              entity: StringPrebuiltEntity
+              choices:
+                - display: "Maker"
+                  value: "Maker"
+                - display: "Desarrollador"
+                  value: "Desarrollador"
+                - display: "Arquitecto"
+                  value: "Arquitecto"
+                - display: "Analista"
+                  value: "Analista"
+
+            - kind: SearchAndSummarizeContent
+              id: gen_refinado_por_rol
+              variable: Topic.Answer
+              moderationLevel: Medium
+              userInput: |-
+                ="Ajusta la recomendación anterior de Power Platform Madrid 2026 para el rol " & Topic.RolObjetivo &
+                 ". Perfil base: temática " & Topic.TematicaPreferida &
+                 ", nivel " & Topic.NivelUsuario &
+                 ", objetivo " & Topic.ObjetivoPrincipal &
+                 ", disponibilidad " & Topic.Disponibilidad & "."
+              additionalInstructions: |
+                Refina la agenda recomendada al rol indicado. Mantén solo las sesiones realmente útiles para ese rol y explica brevemente por qué cada una le aporta valor.
+                No inventes sesiones; si la agenda pública no las confirma, di "no disponible" y recomienda por temática.
+                Devuelve el resultado en una tabla con columnas: Hora, Sesión, Por qué interesa a este rol.
+
+      elseActions:
+        - kind: SendActivity
+          id: send_fin
+          activity: Si quieres, después te preparo también una versión "agenda express" de 3 sesiones clave.

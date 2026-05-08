@@ -1,0 +1,7 @@
+mcs.metadata:
+  componentName: https://www.eventbrite.es/e/entradas-power-platform-madrid-2026-1987346771692
+  description: Este origen de conocimiento busca información en la web que se ha encontrado en el sitio web https://www.eventbrite.es/e/entradas-power-platform-madrid-2026-1987346771692
+kind: KnowledgeSourceConfiguration
+source:
+  kind: PublicSiteSearchSource
+  site: https://www.eventbrite.es/e/entradas-power-platform-madrid-2026-1987346771692
